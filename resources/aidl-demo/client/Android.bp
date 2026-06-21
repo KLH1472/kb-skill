@@ -1,0 +1,13 @@
+// client/Android.bp — 人类写
+
+cc_binary {
+    name: "myclient",
+    srcs: [
+        "main.cpp",
+    ],
+    shared_libs: [
+        "com.example.binder-cpp",   // ← 与 Server 同一个库
+        "libbinder",                //    AOSP 系统库
+        "libutils",                 //    AOSP 系统库
+    ],
+}

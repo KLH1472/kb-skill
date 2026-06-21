@@ -1,0 +1,17 @@
+// aidl/Android.bp — 人类写
+// aidl_interface 模块: 定义接口 → 自动生成 .h/.cpp + 自动创建编译库
+
+aidl_interface {
+    name: "com.example.binder",
+    unstable: true,
+    srcs: ["com/example/binder/*.aidl"],
+}
+
+// 一个 aidl_interface 模块自动产生:
+//   com.example.binder-cpp  — C++ 编译库（这里是默认后端）
+//   自动调用 AIDL 编译器: IStringService.aidl
+//     → gen/include/com/example/binder/IStringService.h
+//     → gen/include/com/example/binder/BnStringService.h
+//     → gen/include/com/example/binder/BpStringService.h
+//     → gen/com/example/binder/IStringService.cpp
+//   自动 export 头文件路径: gen/include/

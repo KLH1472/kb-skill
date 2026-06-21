@@ -1,0 +1,345 @@
+{
+  "entries": [
+    {
+      "id": "format-negotiation",
+      "title": "格式协商流程",
+      "keywords": ["format", "negotiation", "selectformat", "getimpldefinedformat", "implDefinedFormat", "renenegotiate", "buffernnegotiation", "triggebuffernnegotiation", "switchnodeoutputformat", "outputformat", "streamformat", "formatmapper", "imageformatutils", "gralloc", "overrideformat"],
+      "file": "entries/format-negotiation.md",
+      "tags": ["format", "pipeline", "configuration"],
+      "created": "2026-06-06",
+      "updated": "2026-06-06"
+    },
+    {
+      "id": "nativechi-test-framework",
+      "title": "CamX Native Test 测试框架分析",
+      "keywords": ["nativechitest", "nativetest", "chimodule", "chitests", "chitestcase", "nt_assert", "nt_expect", "dlopen", "dlsym", "chientry", "chiops", "chimodule.cpp", "android.mk", "libnativetestutils", "libchiutils", "shared_libraries", "static_libraries", "assert", "chimodule.h", "testcase", "pipeline_test", "offline_test", "realtime_test", "flush_test", "metadata_test"],
+      "file": "entries/nativechi-test-framework.md",
+      "tags": ["test", "architecture"],
+      "created": "2026-06-07",
+      "updated": "2026-06-07"
+    },
+    {
+      "id": "nativechitest-cmake-port",
+      "title": "nativechitest CMake移植分析",
+      "keywords": ["cmake", "port", "cmakelists", "stub", "camera.qcom.so", "chientry", "andoid_stub", "system_library", "linux", "nativechitest", "chiops", "metadataops", "bufferops", "fenceops", "tagops", "cross_compile", "mock_hal"],
+      "file": "entries/nativechitest-cmake-port.md",
+      "tags": ["build", "architecture", "configuration"],
+      "created": "2026-06-07",
+      "updated": "2026-06-07"
+    },
+    {
+      "id": "android-binder-ipc",
+      "title": "Binder IPC 分层架构 — Demo → AOSP 源码映射",
+      "keywords": ["binder", "ipc", "android", "binderfs", "bc_transaction", "br_transaction", "bc_reply", "br_reply", "bbinder", "bpbinder", "bbinder", "bn", "bp", "iprocess_state", "ipcthreadstate", "parcel", "transact", "onTransact", "flat_binder_object", "context_manager", "looper", "binder_transaction_data", "binder_write_read", "ioctl", "mmap", "packed", "copy_from_user", "binder_translate_binder", "binder_translate_handle", "binder_buf", "joinThreadPool", "executeCommand", "waitForResponse", "sendReply", "talkWithDriver", "refcount", "br_release", "br_acquire", "br_noop", "br_increfs", "binder_thread_read", "binder_thread_write", "binder_enqueue_deferred_thread_work", "process_todo", "binder_work_node", "binder_work_transaction_complete", "addService", "register", "service_manager"],
+      "file": "entries/android-binder-ipc.md",
+      "tags": ["architecture", "ipc"],
+      "created": "2026-06-08",
+      "updated": "2026-06-10"
+    },
+    {
+      "id": "bufferqueue-core",
+      "title": "BufferQueueCore 架构与状态机分析",
+      "keywords": ["bufferqueue", "bufferqueuecore", "bufferqueueproducer", "bufferqueueconsumer", "bufferslot", "bufferitem", "bufferstate", "graphicbuffer", "dequeuebuffer", "queuebuffer", "acquirebuffer", "releasebuffer", "fifo", "slot", "fence", "gralloc", "framecounter", "asyncmode", "sharedbuffermode", "attachbuffer", "detachbuffer", "num_buffer_slots", "maxacquiredbuffercount", "maxdequeuedbuffercount", "occupancytracker", "freelots", "freebuffers", "activebuffers", "unusedslots", "mdequeuecondition", "bufferage", "generationnumber"],
+      "file": "entries/bufferqueue-core.md",
+      "tags": ["architecture", "buffer", "session"],
+      "created": "2026-06-14",
+      "updated": "2026-06-14"
+    },
+    {
+      "id": "refbase-port",
+      "title": "RefBase 移植 — AOSP → CMake 独立项目",
+      "keywords": ["refbase", "strongpointer", "sp", "wp", "lightrefbase", "weakref_type", "weakref_impl", "incstrong", "decstrong", "incweak", "decweak", "attemptincstrong", "attemptincweak", "onfirstref", "onlaststrongref", "onlastweakref", "object_lifetime_strong", "object_lifetime_weak", "init_strong_value", "reference_counting", "smart_pointer", "atomic", "port", "cmake"],
+      "file": "entries/refbase-port.md",
+      "tags": ["architecture", "build", "port"],
+      "created": "2026-06-14",
+      "updated": "2026-06-14"
+    },
+    {
+      "id": "custom-chinode-implementation",
+      "title": "自定义 ChiNode 实现全景分析",
+      "keywords": ["chinode", "chinodecallbacks", "chinodeinterface", "chinodewrapper", "chinodeentry", "pfchinodeentry", "pfnnodecreate", "pfnnodeprocrequest", "pfnnodequerybufferinfo", "pfnnodesetbufferinfo", "pfnnodedestroy", "pfnnodeflush", "chiutils", "chinodeutils", "defaultbuffernegotiation", "custom", "node", "nodefactory", "probechicomponents", "nodeexternalcomponentinfo", "externalcomponentinfo", "nodepropertycustomlib", "partialmetadatapublish", "processsequenceid", "dependency", "vendortag", "topology", "xml", "android.mk", "build", "memcpy", "gpu", "dewarp"],
+      "file": "entries/custom-chinode-implementation.md",
+      "tags": ["node", "architecture", "pipeline"],
+      "created": "2026-06-16",
+      "updated": "2026-06-16"
+    },
+    {
+      "id": "v4l2-architecture",
+      "title": "V4L2 深度分析 — API流程、DMA架构、状态机 (v4l2loopback源码验证)",
+      "keywords": ["v4l2", "video4linux2", "v4l2loopback", "mmap", "zero-copy", "dma", "vmalloc", "copy_from_user", "vm_insert_page", "qbuf", "dqbuf", "reqbufs", "querybuf", "streamon", "streamoff", "videobuf2", "vb2", "buffer", "capture", "output", "flag_queued", "flag_done", "write_position", "read_position", "ring_buffer", "state_machine", "ioctl", "videodev2"],
+      "file": "entries/v4l2-architecture.md",
+      "tags": ["architecture", "buffer", "configuration", "initialization"],
+      "created": "2026-06-18",
+      "updated": "2026-06-18"
+    },
+    {
+      "id": "dma-buf-heaps",
+      "title": "DMA-BUF Heaps — Linux 用户态 DMA Buffer 分配 (Android/Linux 通用)",
+      "type": "source-analysis",
+      "keywords": ["dma", "dmabuf", "dma-buf", "dma-heap", "dma_heap", "ion", "dma_heap_ioctl_alloc", "dma_buf_ioctl_sync", "dma_buf_set_name", "dma_heap_allocation_data", "dma_buf_sync", "mmap", "system_heap", "cma_heap", "zero-copy", "buffer", "config_dmabuf_heaps", "config_dmabuf_heaps_system", "wsl2", "kernel"],
+      "file": "entries/dma-buf-heaps.md",
+      "tags": ["architecture", "buffer", "configuration"],
+      "created": "2026-06-18",
+      "updated": "2026-06-18"
+    },
+    {
+      "id": "testbayertoyuv-port-analysis",
+      "title": "TestBayerToYUV 移植分析 — Feature2 离线测试的完整调用链与 stub 策略",
+      "type": "source-analysis",
+      "keywords": ["testbayertoyuv", "feature2offlinetest", "bayer2yuv", "zslsnapshotyuvhal", "bps", "ipe", "chifeature2test", "chifeature2base", "chifeature2generic", "extensionmodule", "submitrequest", "processrequest", "csl", "csljumptable", "cslsubmit", "hwcontext", "pipeline", "offline", "stub", "cmake", "port", "bpsnode", "ipenode", "icp", "ioctl", "fence", "bayer2yuvfeaturedescriptor"],
+      "file": "entries/testbayertoyuv-port-analysis.md",
+      "tags": ["test", "architecture", "pipeline", "build", "port"],
+      "created": "2026-06-19",
+      "updated": "2026-06-19"
+    },
+    {
+      "id": "camx-feature2-csl-mock-plan",
+      "title": "CamX 状态机、测试框架全景与 CSL Mock 移植方案",
+      "type": "source-analysis",
+      "keywords": ["camx", "pipeline", "pipelinestatus", "chifeature2requeststate", "statemachine", "chifeature2test", "feature2offlinetest", "testbayertoyuv", "cf2_assert", "cf2_expect", "check", "pass", "fail", "zslsnapshotyuvhal", "bps", "ipe", "csl", "csljumptable", "cslsubmit", "cslalloc", "cslacquiredevice", "cslstreamon", "hwcontext", "fence", "mock", "port", "offline"],
+      "file": "entries/camx-feature2-csl-mock-plan.md",
+      "tags": ["architecture", "test", "pipeline", "port"],
+      "created": "2026-06-19",
+      "updated": "2026-06-19"
+    },
+    {
+      "id": "camx-core-header-probe",
+      "title": "Phase 3 可行性探测 — CamX Core 头文件编译通过",
+      "type": "source-analysis",
+      "keywords": ["camx", "phase3", "probe", "camxnode", "camxpipeline", "camxmem", "g_camxsettings", "g_camxproperties", "ipdefs", "camxeepromdriver", "camxsensordriver", "camxifestripinginterface", "staticSettings", "gcc", "linux", "x86_64", "operator-delete", "noexcept", "CAMX_LOGS_ENABLED", "__clang__", "camxsession", "camxchicontext", "camxhwcontext", "sensor", "xsd", "compilation-matrix", "parameterparser", "settingsgenerator", "props.pl", "cmake-generator"],
+      "file": "entries/camx-core-header-probe.md",
+      "tags": ["build", "port", "architecture", "phase3"],
+      "created": "2026-06-19",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "chifeature2test-phase2-complete",
+      "title": "chifeature2test Phase 1-2 完成状态 — Phase 3 启动手册",
+      "type": "source-analysis",
+      "keywords": ["chifeature2test", "cmake", "port", "phase2", "phase3", "dummynode", "csl", "mock", "stub", "chxutils", "chimetadata", "chimetadatamanager", "refbase", "mutex", "condition", "semaphore", "pipeline", "session", "extensionmodule", "chi_stub", "feature2", "testbayertoyuv", "bayer2yuv", "zslsnapshotyuvhal", "lightweightdoublylinkedlist", "chibuffermanager", "graphicbuffer", "outputnotificationpending", "state7", "patched_srcs"],
+      "file": "entries/chifeature2test-phase2-complete.md",
+      "tags": ["build", "architecture", "test", "port", "pipeline"],
+      "created": "2026-06-19",
+      "updated": "2026-06-19"
+    },
+    {
+      "id": "aidl-binder-demo",
+      "title": "AIDL Binder Demo — .aidl → 编译器生成 → Server/Client 完整剖析",
+      "type": "source-analysis",
+      "keywords": ["aidl", "binder", "bn", "bp", "bninterface", "bpinterface", "iinterface", "iinterfacedefault", "onTransact", "parcel", "transact", "declare_meta_interface", "implement_meta_interface", "addService", "joinThreadPool", "waitForService", "processState", "IPCThreadState", "descriptor", "asInterface", "writeInterfaceToken", "readString16", "writeString16", "transaction_code", "android.bp", "aidl_interface", "cc_binary", "StringService", "IStringService", "Delegate", "namespace"],
+      "file": "entries/aidl-binder-demo.md",
+      "tags": ["architecture", "ipc"],
+      "created": "2026-06-18",
+      "updated": "2026-06-18"
+    },
+    {
+      "id": "step-c-chi-forwarding",
+      "title": "Step C 分析 — CHI 转发策略",
+      "type": "design-decision",
+      "keywords": ["chi", "forwarding", "chientry", "chicontext", "createSession", "createPipelineDescriptor", "submitPipelineRequest", "chi_stub", "chiframework_stubs", "chipipelinecreatedescriptor", "pipeline", "session", "feature2", "dummynode", "csl", "mock"],
+      "file": "entries/step-c-chi-forwarding.md",
+      "tags": ["architecture", "design-decision", "phase3"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "phase3-workaround-inventory",
+      "title": "Phase 3 已知 Hack / Workaround / 临时方案清单",
+      "type": "configuration",
+      "keywords": ["workaround", "hack", "temporary", "vendortag", "queryvendortaglocation", "setTag", "metabuffer", "pSessionMetadata", "pSensorCaps", "MPMEnable", "mempoolmgr", "deviceCount", "csl", "mock", "dummynode", "phase3", "cleanup"],
+      "file": "entries/phase3-workaround-inventory.md",
+      "tags": ["configuration", "phase3", "port"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "phase3-test-issues-analysis",
+      "title": "阶段性测试问题全量分析 — Phase 3 DummyNode E2E",
+      "type": "debugging",
+      "keywords": ["updatemetadata", "targetbuffermanager", "outputnotificationpending", "state7", "tcache", "metadata", "mismatch", "metabuffer", "chimetadata", "getprivateuserhandle", "isvalid", "camx2491", "thread", "shutdown", "feature2", "statemachine"],
+      "file": "entries/phase3-test-issues-analysis.md",
+      "tags": ["debugging", "phase3", "architecture"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "tcache-heap-corruption-investigation",
+      "title": "tcache/heap corruption 深度调查 — cross-arena free list 损坏",
+      "type": "debugging",
+      "keywords": ["tcache", "heap", "corruption", "unlink_chunk", "cross-arena", "free", "malloc", "segv", "watchpoint", "chitargetbuffermanager", "chxutils", "calloc", "thread"],
+      "file": "entries/tcache-heap-corruption-investigation.md",
+      "tags": ["debugging", "phase3", "memory"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "phase3-systematic-audit",
+      "title": "Phase 3 系统审计结果 — 残留 stub/workaround 全量盘点",
+      "type": "source-analysis",
+      "keywords": ["audit", "stub", "workaround", "dead-code", "chi_stub", "chiframework_stubs", "camx_runtime_stubs", "patched_srcs", "offlinelogger", "fence", "metadata", "cleanup", "phase3"],
+      "file": "entries/phase3-systematic-audit.md",
+      "tags": ["architecture", "phase3", "port"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "testbayertoyuv-stub-alignment",
+      "title": "TestBayerToYUV 执行路径 — real vs stub 全量对照",
+      "type": "source-analysis",
+      "keywords": ["testbayertoyuv", "stub", "real", "alignment", "metadata", "metabuffer", "settag", "gettag", "vendortag", "querylocation", "activatepipeline", "dummynode", "csl", "mock", "fence", "imageformatutils", "phase3", "feature2"],
+      "file": "entries/testbayertoyuv-stub-alignment.md",
+      "tags": ["architecture", "phase3", "test", "pipeline"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "pass-criteria-alignment",
+      "title": "TestBayerToYUV PASS 标准对齐调查",
+      "type": "source-analysis",
+      "keywords": ["pass", "fail", "criteria", "validation", "false-positive", "outputerror", "cf2_assert", "state-machine", "complete", "testbayertoyuv", "feature2testcase"],
+      "file": "entries/pass-criteria-alignment.md",
+      "tags": ["test", "phase3", "quality"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "title": "ChiMetadata 类与 Feature2 Bayer2Yuv 元数据操作全景分析",
+      "type": "source-analysis",
+      "keywords": ["chimetadata", "chimetadataops", "chimetahandle", "chimetadataentry", "pfn_cmb", "settag", "gettag", "setvendortag", "getvendortag", "pcopy", "pmerge", "pclone", "pcreate", "pdestroy", "pinvalidate", "pfilter", "psetandroidmetadata", "tuningmode", "filldefaulttuningmetadata", "vendortagvalue", "feature2", "bayer2yuv", "chifeature2generic", "chifeature2base", "populatedependencyports", "populateconfigurationsettings", "mergeappsettings", "debugdatacopy", "metadata", "disjoint"],
+      "file": "entries/chimetadata-feature2-ops-flow.md",
+      "tags": ["architecture", "metadata", "feature2", "test"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "feature2-test-porting-plan",
+      "title": "Feature2OfflineTest 全量用例移植计划",
+      "type": "design-decision",
+      "keywords": ["feature2offlinetest", "testbps", "testipe", "testmultistage", "testyuvtojpeg", "testbayertoyuv", "porting", "descriptor", "bpsfeaturedescriptor", "ipefeaturedescriptor", "jpegfeaturedescriptor", "multistagefeaturedescriptor", "dummynode", "pipeline", "multistage", "internallink", "jpeg", "blob", "p010"],
+      "file": "entries/feature2-test-porting-plan.md",
+      "tags": ["test", "architecture", "design-decision", "port"],
+      "created": "2026-06-20",
+      "updated": "2026-06-20"
+    },
+    {
+      "id": "prunable-variant-investigation",
+      "title": "PrunableVariant 裁剪机制 — 完整调查",
+      "type": "source-analysis",
+      "keywords": ["prunable", "prunablevariant", "prunevariant", "prunesettings", "shouldprune", "pruneusecasedescriptor", "cloneusecase", "clonepipelinedesc", "getvariantgroup", "getvarianttype", "prunegroupsnapshot", "prunetypejpeg", "prunetypeheic", "heic", "jpeg", "sinktarget", "chxusecaseutils", "chifeature2generic", "onpruneusecasedescriptor", "preparefeaturedata", "assignstreams", "internalzslyuv2jpeg"],
+      "file": "entries/prunable-variant-investigation.md",
+      "tags": ["architecture", "pipeline", "phase3", "port"],
+      "created": "2026-06-20",
+      "updated": "2026-06-21"
+    },
+    {
+      "id": "batch-crash-investigation",
+      "title": "Batch Crash 调查 — CAMERA_METADATA_ENUM_VAL 宏错误导致 tag 越界",
+      "type": "debugging",
+      "keywords": ["batch", "crash", "sigsegv", "metabuffer", "settag", "casename", "offlinelogger", "odr", "hashmap", "uninitialised", "asan", "valgrind", "bisect", "signalhandler", "camxmem", "operator new", "calloc", "bss", "layout"],
+      "file": "entries/batch-crash-investigation.md",
+      "tags": ["debugging", "phase3", "memory"],
+      "created": "2026-06-21",
+      "updated": "2026-06-21"
+    },
+    {
+      "id": "self-contained-migration-plan",
+      "title": "Self-Contained 迁移计划 — 精确拷贝 444 个外部依赖文件",
+      "type": "design-decision",
+      "keywords": ["self-contained", "migration", "precise-copy", "camx_root", "directory", "structure", "g_pipelines", "lito", "bitra", "saipan", "patched_srcs", "external-dependency", "destroyfence", "operator-new", "444"],
+      "file": "entries/self-contained-migration-plan.md",
+      "tags": ["architecture", "design-decision", "build"],
+      "created": "2026-06-21",
+      "updated": "2026-06-21"
+    },
+    {
+      "id": "external-dependency-extraction-method",
+      "title": "判断 CMake 项目外部依赖文件的方法 — 四种提取+交叉验证",
+      "type": "configuration",
+      "keywords": ["external-dependency", "cmake", "d-file", "dependency", "extraction", "header", "include", "transitive-closure", "cross-validation", "xsd", "add_custom_command", "patched_srcs", "dead-code"],
+      "file": "entries/external-dependency-extraction-method.md",
+      "tags": ["build", "methodology", "configuration"],
+      "created": "2026-06-21",
+      "updated": "2026-06-21"
+    },
+    {
+      "id": "drq-dependency-mechanism",
+      "title": "DRQ 依赖机制与 DummyNode 依赖演示 — fence/property/IOBuffer/ChiFence 四种类型 + 三种 fence 注册模式",
+      "type": "source-analysis",
+      "keywords": ["drq", "deferred-request-queue", "dependency", "fence", "property", "csl-fence", "chi-fence", "SetInputBuffersReadyDependency", "SetPendingBufferDependency", "WriteDataList", "FenceSignaledCallback", "dummy-node", "bps", "ipe", "PropertyIDBPSGammaOutput", "hasIOBufferAvailabilityDependency", "hasInputBuffersReadyDependency", "hasFenceDependency", "callback-chain", "enableImageBufferLateBinding", "IsNodeInPipeline"],
+      "file": "entries/drq-dependency-mechanism.md",
+      "tags": ["architecture", "source-analysis", "pipeline"],
+      "created": "2026-06-21",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "android-log-system-redesign",
+      "title": "Android 风格日志系统整改 — XLOG 宏设计 + 三层架构 + 迁移方式",
+      "type": "design-decision",
+      "keywords": ["xlog", "xloge", "xlogi", "xlogd", "android-log", "__android_log_print", "__camx_log_emit", "log-tag", "cf2_log", "chx_log", "camx_log", "aloge", "fprintf", "stub", "logcat", "timestamp", "pid", "tid"],
+      "file": "entries/android-log-system-redesign.md",
+      "tags": ["design-decision", "logging", "infrastructure"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "project-onboarding",
+      "title": "项目入口文档 — CamX Feature2 离线测试 x86 移植（目标/进展/审计/压测/代码结构/KB索引/DRQ调查）",
+      "type": "design-decision",
+      "keywords": ["onboarding", "entry", "overview", "project", "camx", "feature2", "chifeature2test", "phase3", "dummynode", "stub", "audit", "stress-test", "drq", "fence", "cmake", "x86", "port"],
+      "file": "entries/project-onboarding.md",
+      "tags": ["architecture", "design-decision", "overview"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "chifence-dependency-flow",
+      "title": "ChiFence 依赖机制深度分析 — 数据结构 + DRQ 三路径 + DummyNode 演示",
+      "type": "source-analysis",
+      "keywords": ["chifence", "chi-fence", "hasFenceDependency", "chiFenceDependency", "ChiFenceTypeInternal", "PFNCHIFENCECALLBACK", "DependencyFenceCallbackCSL", "ChiFenceSignaledCallback", "UpdateChiFenceDependency", "WaitForFenceDependency", "FenceCallbackCSL", "AddChiDependencyEntry", "chiSignaledCount", "ChiFenceState", "ChiFenceInit", "camxchi", "camxchinodewrapper", "ChiFenceDependencyCallback", "acquireFence", "NodeSourceInputPortChiFenceCallback", "eisv2", "eisv3", "ncs", "gyro", "self-dependency", "tbm", "chitargetbuffermanager", "EnableTBMChiFence", "EnableMFSRChiFence", "epr-order", "topological", "postjob", "m_ppOrderedNodes"],
+      "file": "entries/chifence-dependency-flow.md",
+      "tags": ["architecture", "source-analysis", "pipeline", "fence"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "eis-chifence-usage",
+      "title": "EIS ChiFence 使用全景 — 唯一 Node 级 ChiFence 真实用例 (EISv2/v3 + NCS 陀螺仪异步等待)",
+      "type": "source-analysis",
+      "keywords": ["eis", "eisv2", "eisv3", "chifence", "ncs", "gyro", "gyroscope", "SetGyroDependency", "TriggerClientFence", "GetDataAsync", "FillGyroData", "ChiNCSDataRequest", "NCSAsyncRequest", "NCSIntfQSEE", "NCSSensor", "NCSService", "pCreateFence", "pGetData", "pGetDataSource", "ChiFetchData", "self-dependency", "camxchinodeeisv2", "camxchinodeeisv3", "camxncsintfqsee", "m_signalChiFence", "m_attachChiFence", "m_releaseChiFence", "QtimerTicks", "processSequenceId", "ChiDataGyro"],
+      "file": "entries/eis-chifence-usage.md",
+      "tags": ["architecture", "source-analysis", "fence", "sensor"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "drq-four-dependency-types",
+      "title": "DRQ 四种依赖类型设计原理 — Property/CSL Fence/ChiFence/IO Buffer 不可替代性与组合使用",
+      "type": "source-analysis",
+      "keywords": ["drq", "dependency", "property", "csl-fence", "chifence", "io-buffer", "hasPropertyDependency", "hasInputBuffersReadyDependency", "hasFenceDependency", "hasIOBufferAvailabilityDependency", "WriteDataList", "PublishMetadata", "MetadataPool", "FenceSignaledCallback", "bindIOBuffers", "enableImageBufferLateBinding", "BindInputOutputBuffers", "late-binding", "DMA", "kernel-fence", "pub-sub", "lazy-allocation"],
+      "file": "entries/drq-four-dependency-types.md",
+      "tags": ["architecture", "source-analysis", "pipeline", "design-decision"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-fro-state-machine",
+      "title": "FRO 十状态状态机 — 以 TestBayerToYUV 为例的完整追踪",
+      "type": "source-analysis",
+      "keywords": ["feature2", "fro", "requestobject", "chifeature2requeststate", "state-machine", "initialized", "readytoexecute", "executing", "inputresourcepending", "inputresourcependingscheduled", "outputresourcepending", "outputnotificationpending", "complete", "processrequest", "handlepreparerequest", "handleexecuteprocessrequest", "threadcallback", "processbuffercallback", "testbayertoyuv"],
+      "file": "entries/feature2-fro-state-machine.md",
+      "tags": ["architecture", "source-analysis", "feature2", "state-machine"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-testbayertoyuv-e2e",
+      "title": "TestBayerToYUV 端到端时序 — Feature2 完整请求生命周期",
+      "type": "source-analysis",
+      "keywords": ["feature2", "testbayertoyuv", "bayer2yuv", "e2e", "end-to-end", "processrequest", "submitrequesttosession", "processresult", "processbuffercallback", "getinputdependency", "resultnotification", "releaseinputdependency", "submitrequestnotification", "feature2offlinetest", "feature2testcase", "chifeature2generic", "chifeature2base", "uro", "fro", "bayer2yuvfeaturedescriptor", "zslsnapshotyuvhal", "buffer-flow", "pass-criteria"],
+      "file": "entries/feature2-testbayertoyuv-e2e.md",
+      "tags": ["architecture", "source-analysis", "feature2", "test"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    }
+  ]
+}
