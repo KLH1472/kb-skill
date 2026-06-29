@@ -173,3 +173,11 @@ ChiFence 仅在有 BPS 的 pipeline 中激活（TestBayerToYUV / TestMultiStage 
 4. ~~IPE 无条件注册 BPSGammaOutput 依赖~~ → 真实 IPE 用 `IsNodeInPipeline(BPS)` 保护（camxipenode.cpp:8778/8821）
 5. 补充 `Node::SetPendingBufferDependency`（Pattern C，内部框架用）
 6. 补充 SW nodes 的直接 `bufferDependency` 填充模式（Pattern B，无条件）
+
+---
+
+## 修正（2026-06-29）
+
+**触发**：系统调查了 BPS/IPE 在 TestBayerToYUV 中的完整依赖注册链路，细化了 IPE 的 property dep gate。
+
+**补充条目**：`drq-bps-ipe-dependency-registration` — 深入 `IsTagPresentInPublishList` gate 机制 + `QueryMetadataPublishList` 注册 + `WriteDataList` 完整调用链 + Dummy 差异分析。

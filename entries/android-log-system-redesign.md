@@ -21,7 +21,7 @@ CamX/CHI 源码在 Android 上通过 liblog.so 输出日志，移植到 x86 Linu
   XLOGE/XLOGI/...  — 本项目专用，带 [level][CORE   ] file:line func()
   ALOGE/ALOGI/...  — Android API stub（stubs/log/log.h、camx_stubs/utils/Log.h 提供）
   CAMX_LOG_*       — CamX 框架宏，经 Log::LogSystem -> __android_log_write
-  CHX_LOG_*        — CHI 框架宏，经 ALOGE -> __android_log_print
+  CHX_LOG_*        — CHI 框架宏，经 ChiLog::LogSystem -> __camx_log_emit（已修复）
 
 适配层:
   __android_log_print(prio, tag, fmt, ...)  — printf 风格，snprintf + __camx_log_emit
@@ -138,6 +138,35 @@ CHX_LOG_VERBOSE(→ XLOGV(
 - `chxdebugprint.h:183` — CHX_LOG_ERROR 内部 ALOGE 调用（已拼入 file:line，不可在 ALOGE 层再加）
 - `chifeature2log.h:41-67` — CF2_LOG_* 宏定义（双重输出：CF2Log.Log + CHX_LOG_*）
 - `camxosutilslinuxembedded.cpp:470` — OsUtils::LogSystem（→ __android_log_write）
+
+## 📝 CHX_LOG 路径修复
+
+### 问题
+
+`CHX_LOG_*` 宏（CHI-CDK 层）通过 `ChiLog::LogSystem`（log_compat.cpp）输出，但原实现是 plain `fprintf(stderr)`，缺少时间戳/PID/TID，与 XLOG/CAMX_LOG 格式不统一。
+
+### 原因
+
+`ChiLog::LogSystem` 绕过了 `__camx_log_emit` 统一出口。同时 `g_enableChxLogs = 3` 只开了 ERROR(1)+WARN(2)，INFO(8) 级别被屏蔽。
+
+### 修复（2 处改动）
+
+1. **`nativechitest/chiutils/log_compat.cpp`**：`ChiLog::LogSystem` 内联时间戳格式化（与 `__camx_log_emit` 相同格式），不依赖 `<android/log.h>`（nativechitest include path 没有 camx_stubs/）
+2. **`g_enableChxLogs = 11`**（3 | CHX_LOG_INFO_MASK=8）：开启 INFO 级别日志
+
+### CHX_LOG 开关机制
+
+```
+g_enableChxLogs: UINT32 位掩码
+  bit 0 (1):  CHX_LOG_ERROR_MASK
+  bit 1 (2):  CHX_LOG_WARN_MASK
+  bit 2 (4):  CHX_LOG_CONFIG_MASK
+  bit 3 (8):  CHX_LOG_INFO_MASK
+  bit 4 (16): CHX_LOG_DUMP_MASK
+  bit 5 (32): CHX_LOG_VERBOSE_MASK
+
+g_enableSystemLog: BOOL，控制 ALOGI/ALOGE 路径（当前 FALSE，仅走 ChiLog::LogSystem）
+```
 
 ## 📝 Git 提交记录
 

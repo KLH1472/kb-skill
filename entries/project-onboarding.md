@@ -1,8 +1,8 @@
 # 项目入口文档 — CamX Feature2 离线测试 x86 移植
 
 > 类型：设计决策
-> 最后更新：2026-06-22
-> Git HEAD：`08b4897`（日志整改最后一笔）
+> 最后更新：2026-06-29
+> Git HEAD：`03f14d4`（ImageSensorModuleData mock，原版 camxnode.cpp + camxpipeline.cpp）
 
 ---
 
@@ -29,7 +29,7 @@
 | 全量用例移植 | ✅ 完成 | 5 个用例 × 10 轮 = 50/50 稳定 |
 | 系统审计 | ✅ 完成 | HIGH 全部修复，MEDIUM 记录在案 |
 | 日志系统整改 | ✅ 完成 | XLOG 宏 + Android 格式统一输出 |
-| **下一步：Fence/DRQ/FRO 状态机深入** | 🔜 | 理解 Feature Request Object 生命周期、状态转换 |
+| **下一步：camxchisession.cpp patch 消除** | 🔜 | 最后一个 patched_src 的根因修复（Session 构造器 = default）|
 
 ### 2.2 五个测试用例
 
@@ -54,20 +54,15 @@
 
 ### 2.4 残留 Stub / Workaround（KB: `phase3-workaround-inventory`）
 
-**当前测试路径不触发，但后续扩展可能需要处理：**
+**2026-06-29 更新：W1/W2/W4/W5/W7 已全部消除，W3 通过完整 ImageSensorModuleData mock 绕过 union 误读（pSensorModeInfo 非 NULL）。camxnode.cpp 和 camxpipeline.cpp 均使用原版。**
 
-| ID | 文件 | 内容 | 优先级 |
-|----|------|------|--------|
-| W1 | camxpipeline.cpp | pSessionMetadata NULL → 创建默认 MetaBuffer | 中 |
-| W2 | camxnode.cpp | pSensorCaps NULL → WARN（0 cameras） | 低 |
-| W4 | camx_runtime_stubs.cpp | MPMEnable=FALSE（CSL mock 无 HW device） | 中 |
-| W5 | camxnode.cpp | Buffer mgr 创建失败 non-fatal（W4 下游） | 中 |
-| W7 | camx_runtime_stubs.cpp | SubmitRequest try-catch 防 ASSERT 崩溃 | 低 |
-| C1-C5 | chi_stub.cpp | Stub 函数（VendorTag/Meta/Fence/Buffer/Pipeline 查询） | 低 |
-| F1-F4 | chiframework_stubs.cpp | 空实现（ChiFence/Buffer/Feature descriptors） | 低 |
-| R1-R3 | camx_runtime_stubs.cpp | GetPlaneSize 仅 NV12 / ValidateBufferSize 永 success | 低 |
+### 2.5 最终 patched_srcs 清单（3 个文件）
 
-**清理优先级**：W4+W5（CSL mock device）→ W1（pipeline metadata）→ 其余低优先级。
+| 文件 | 目的 |
+|------|------|
+| `camxhwenvironment.cpp` | W2: GetCameraInfo dummy + W7: GetImageSensorModuleData dummy |
+| `camxatomic.cpp` | 原始 typo 修复 |
+| `camxchisession.cpp` | failed Init → CAMX_DELETE（Session 构造器不初始化 m_pFlushLock） |
 
 ---
 
@@ -77,10 +72,13 @@
 
 ```bash
 cd build
-cmake .. && make -j$(nproc)
+cmake .. && make -j$(nproc) camera_qcom chifeature2test
 ```
 
-产物：`build/chifeature2test/chifeature2test`
+产物：`build/lib/libcamera_qcom.so`，`build/chifeature2test/chifeature2test`
+
+> 生成源文件（g_sensor/g_parser）使用显式文件列表 + `GENERATED` 属性，clean build 一步到位。
+> 测试数据构建时自动生成，无需手动处理。
 
 ### 3.2 运行单个用例
 
@@ -124,13 +122,14 @@ make -j$(nproc)
 
 ### 3.5 测试数据
 
-`build/testdata/` 目录需包含以下 dummy 文件（构建系统自动生成）：
+构建时由 `add_custom_command` 自动生成，文件存在即跳过。首次 generate 约 ~90MB：
 
 | 文件 | 大小 | 用途 |
 |------|------|------|
-| Bayer2Yuv_image_4656x3496_0.raw | ~20MB | BPS 输入 |
-| IPE_image_4656x3496_0.p010 | ~48MB | IPE 输入 |
-| JPEG_image_4656x3496_0.yuv | ~24MB | JPEG 输入 |
+| Bayer2Yuv_image_4656x3496_0.raw | ~20MB | TestBPS 输入 |
+| bps-idealraw-input.raw | ~20MB | TestBayerToYUV / TestMultiStage 输入 |
+| IPE_image_4656x3496_0.p010 | ~47MB | TestIPE 输入 |
+| ipe-unittest-input_full_vga_colorbar-1.yuv | ~450KB | TestYUVToJpeg 输入 |
 | B2Y_Metadata_0.bin | 4KB | 元数据 |
 
 ---
@@ -172,10 +171,10 @@ CAMX_SAIPAN_LA.UM.8.13.R1_cmake/       ← 工作区根目录
 ├── chifeature2test/                    ← Feature2 离线测试
 │   ├── CMakeLists.txt                  ← 构建 chifeature2test 可执行文件
 │   ├── patched_srcs/                   ← 源码补丁（覆盖 chi-cdk 原始文件编译）
+│   │   │                                  chxmetadata.cpp 已统一→直接用原始源
 │   │   ├── chifeature2base.cpp         ← Feature2 状态机核心（最大文件，278 处日志迁移）
 │   │   ├── feature2offlinetest.cpp     ← 测试入口 + 5 个用例定义
 │   │   ├── feature2testcase.cpp        ← 测试框架（PASS/FAIL 判定、状态机等待）
-│   │   ├── chxmetadata.cpp             ← CHI metadata 包装
 │   │   ├── feature2buffermanager.cpp   ← Buffer 管理
 │   │   ├── genericbuffermanager.cpp    ← 通用 buffer 管理
 │   │   ├── chifeature2testmain.cpp     ← main() 入口
@@ -185,11 +184,10 @@ CAMX_SAIPAN_LA.UM.8.13.R1_cmake/       ← 工作区根目录
 │   └── stubs/                          ← CHI 框架 stub
 │       └── chiframework_stubs.cpp      ← Pipeline/Session/Fence 转发
 │
-├── camx_patched_srcs/                  ← CamX Core 源码补丁（4 个文件，最小改动）
+├── camx_patched_srcs/                  ← CamX Core 源码补丁（3 个文件，最小改动）
 │   ├── camxatomic.cpp                  ← 原始代码 typo 修复
 │   ├── camxchisession.cpp              ← failed Init → CAMX_DELETE
-│   ├── camxnode.cpp                    ← W2(sensor guard) + W5(buffer mgr guard)
-│   └── camxpipeline.cpp               ← W1(metadata guard) + sensor mode guard + pool assert 移除
+│   └── camxhwenvironment.cpp           ← W2+W7 mock: GetCameraInfo + GetImageSensorModuleData
 │
 ├── stubs/                              ← Android 系统头文件 stub（被 include path 替换）
 │   ├── hardware/                       ← camera3.h, hardware.h
@@ -239,15 +237,35 @@ CAMX_SAIPAN_LA.UM.8.13.R1_cmake/       ← 工作区根目录
 ### 日志系统
 | ID | 标题 | 类型 |
 |----|------|------|
-| `android-log-system-redesign` | Android 风格日志系统整改 — XLOG 宏 + 三层架构 | 设计决策 |
+| `android-log-system-redesign` | Android 风格日志系统整改 — XLOG 宏 + 三层架构 + CHX_LOG 统一 | 设计决策 |
+
+### Feature2 架构学习
+| ID | 标题 | 类型 |
+|----|------|------|
+| `feature2-why-feature2` | Feature2 解决了什么问题 — Pipeline 能力边界与 Feature2 价值 | 源码分析 |
+| `feature2-fro-state-machine` | FRO 十状态状态机 — 以 TestBayerToYUV 为例的完整追踪 | 源码分析 |
+| `feature2-testbayertoyuv-e2e` | TestBayerToYUV 端到端时序 — Feature2 完整请求生命周期 | 源码分析 |
+| `feature2-onp-buffer-release` | ONP Buffer 释放机制 — 三标志位 + Graph 路由 + TBM 引用计数 | 源码分析 |
+| `feature2-processrequest-pump` | ProcessRequest 泵模型 — 谁在推动 FRO 状态前进 | 源码分析 |
+| `two-feature-graph-feasibility` | 两 Feature Graph 测试用例可行性评估 | 设计决策 |
+| `feature2-b2y-state-by-state` | TestBayerToYUV 逐状态数据流 — 10 个 FRO 状态全追踪 | 源码分析 |
 
 ### Phase 3 核心（DummyNode E2E → 全量测试）
 | ID | 标题 | 类型 |
 |----|------|------|
-| `drq-dependency-mechanism` | DRQ 依赖机制 — fence/property/IOBuffer/ChiFence 四种类型 + 三种注册模式 | 源码分析 |
+| `dummynode-vs-camxnode-architecture` | DummyNode vs CamX Node 架构评估 | 源码分析 |
+| `camxnode-patches-w2-w5-analysis` | camxnode.cpp / camxpipeline.cpp patches — W1-W7 根因与修复方案 | 源码分析 |
+| `mpm-portability-risk-analysis` | MemPoolMgr (MPM) 移植风险系统调查 | 源码分析 |
+| `cmake-generated-sources-pattern` | CMake 生成源文件构建模式 — GLOB vs 显式列表 | 配置规则 |
+| `chimetadatamanager-three-impls` | ChiMetadataManager 三实现对比 | 源码分析 |
+| `drq-dependency-mechanism` | DRQ 依赖机制 — 四种类型 + 三种注册模式 | 源码分析 |
 | `drq-four-dependency-types` | DRQ 四种依赖类型设计原理 — 不可替代性与组合使用 | 源码分析 |
 | `chifence-dependency-flow` | ChiFence 依赖机制深度分析 — DRQ 三路径 + 自依赖 demo | 源码分析 |
+| `drq-bps-ipe-dependency-registration` | BPS/IPE DRQ 依赖注册 — seq=0/1 两阶段 + IsTagPresentInPublishList gate | 源码分析 |
+| `drq-bps-dependency-satisfaction` | BPS 依赖满足 — Session 预 signal + DRQ fence skip → 零等待 | 源码分析 |
 | `eis-chifence-usage` | EIS ChiFence 使用全景 — 唯一 Node 级真实用例 (EISv2/v3 + NCS) | 源码分析 |
+| `eis-algorithm-principles` | EIS 电子防抖原理 — 陀螺仪数据流 + Margin/Warp + v2/v3 对比 | 源码分析 |
+| `camx-node-catalog` | CamX 全量 Node 目录 — HWL/SWL/CHI 三层节点分类与功能 | 源码分析 |
 | `phase3-systematic-audit` | Phase 3 系统审计结果 — 残留 stub/workaround 全量盘点 | 源码分析 |
 | `phase3-workaround-inventory` | Phase 3 已知 Hack/Workaround 清单（含清理记录） | 配置规则 |
 | `phase3-test-issues-analysis` | 阶段性测试问题全量分析 | 调试记录 |
@@ -293,7 +311,7 @@ CAMX_SAIPAN_LA.UM.8.13.R1_cmake/       ← 工作区根目录
 
 ## 6. DRQ 系统调查摘要
 
-> 详细分析见 KB 条目：`drq-dependency-mechanism`、`drq-four-dependency-types`、`chifence-dependency-flow`、`eis-chifence-usage`
+> 详细分析见 KB 条目：`drq-dependency-mechanism`、`drq-four-dependency-types`、`chifence-dependency-flow`、`eis-chifence-usage`、`drq-bps-ipe-dependency-registration`、`drq-bps-dependency-satisfaction`
 
 ### 6.1 四种 DRQ 依赖类型 — 不可替代性
 
@@ -312,23 +330,102 @@ CAMX_SAIPAN_LA.UM.8.13.R1_cmake/       ← 工作区根目录
 - **IO Buffer Availability**：非等待机制；bindIOBuffers flag → BindInputOutputBuffers → late binding 分配
 - **EPR 执行顺序**：PostJob 拓扑序发出，EPR 在线程池并行执行（非确定性）
 
-### 6.3 下一步方向
+### 6.3 BPS 依赖满足 — Session 预 signal [2026-06-29]
 
-- **FRO 状态机**：Feature Request Object 从创建到 Complete 的状态转换
+**测试场景**：TestBayerToYUV 离线管道 ZSLSnapshotYUVHAL（BPS+IPE，无 Sensor node，无预览管道）
+
+**BPS seq=0 声明依赖**：
+- property: **0 个**（`IsRealTime()=FALSE` → `sensorConnected=FALSE` → SetDependencies 外层跳过）
+- fence: 1 个（`SetInputBuffersReadyDependency`，late binding，默认开启）
+
+**fence 预 signal 机制**：
+1. `Session::SetupRequestData()` 中 `CSLFenceSignal(hInternalCSLFence, ...)` — 在 `Pipeline::ProcessRequest()` 之前
+2. `Node::SetupRequestInputPorts()` 记录 `pIsFenceSignaled = TRUE`
+3. DRQ `AddDeferredNode` 检查 `CamxAtomicLoadU(pIsFenceSignaled) == 1` → fence 被 SKIP
+4. `fenceCount=0, propertyCount=0` → BPS 入 ready queue → **零等待**
+
+**结论**：BPS 在离线管道中实际不等待任何依赖，fence 在 Pipeline 处理前已被 Session 层 signal。
+
+### 6.4 IPE 对 BPS 的 property 依赖 — IsTagPresentInPublishList gate
+
+IPE 通过 `IsTagPresentInPublishList(PropertyIDBPSGammaOutput)` 检查 BPS 是否注册了 publish 来决定是否声明 property 依赖。BPS 通过 `QueryMetadataPublishList()` 注册可发布的 tags。
+
+### 6.5 下一步方向
+
 - **DRQ 调度细节**：DispatchReadyNodes 的优先级、批处理、背压机制
 
 ---
 
-## 7. 新 Session 启动清单
+## 7. Feature2 教学计划
+
+目标：系统学习 Feature2 架构，为面试准备。每章对应 1 个 KB 条目 + 可面试复述的"故事版本"。
+
+| # | 核心问题 | 状态 | KB 条目 |
+|---|---------|------|---------|
+| 1 | Feature2 解决了什么问题？ | ✅ 完成 | `feature2-why-feature2` |
+| 2 | FRO 十状态：每个状态在等什么？ | ✅ 完成 | `feature2-fro-state-machine` |
+| — | ONP buffer 释放机制深度调查 | ✅ 完成 | `feature2-onp-buffer-release` |
+| 3 | ProcessRequest 泵模型：谁在推动状态前进？ | ✅ 完成 | `feature2-processrequest-pump` |
+| — | 两 Feature Graph 测试可行性评估 | ✅ 完成 | `two-feature-graph-feasibility` |
+| 4 | Feature Graph：多 Feature 如何协作？ | 待开始 | — |
+| 5 | Stages & Sequences：多帧合成怎么做？ | 待开始 | — |
+| 6 | 面试能说什么？Feature2 的设计模式 | 待开始 | — |
+
+已验证事项：
+- FRO 状态转换日志 5/5 用例全部吻合（g_enableChxLogs=11 开启 CHX_LOG_INFO）
+- URO-FRO 数量关系：FRO = 参与处理的 Feature 实例数 × URO 数
+- 原始测试框架 ChiFeature2TestBase 是非功能性骨架（代码全部 #if 0），我们的 Feature2TestCase 是独立完整实现
+
+注意事项：
+- git stash 中有一个 Signal 修复（feature2testcase.cpp ProcessMessage 后 Signal 条件变量），评估后认为无修复必要（FRO 状态转换本身正常，500ms 延迟仅是测试框架轮询延迟）
+- TestBayerToYUV 端到端时序详见 `feature2-testbayertoyuv-e2e`
+
+---
+
+## 8. 新 Session 启动清单
 
 ```bash
 # 1. 加载 KB skill
 # 2. 读取本文档: entries/project-onboarding.md
-# 3. 按需加载具体 KB 条目（如 drq-dependency-mechanism）
+# 3. 按需加载 Feature2 KB 条目:
+#    feature2-fro-state-machine (十状态 + 日志验证 + URO-FRO 关系)
+#    feature2-onp-buffer-release (ONP 三标志位 + Graph 路由)
 # 4. 确认 git 状态:
 cd ~/code/CAMX_SAIPAN_LA.UM.8.13.R1_cmake
 git log --oneline -5
 git status --short
+git stash list
 # 5. 确认构建和测试:
-cd build && make -j$(nproc) && ./chifeature2test/chifeature2test -f 1 2>&1 | grep -E "PASS|FAIL|EXIT"
+cd build && cmake .. && make -j$(nproc) camera_qcom chifeature2test && ./chifeature2test/chifeature2test -f 1 2>&1 | grep -E "PASS|FAIL|Final"
+```
+
+---
+
+## 9. 代码提交流程
+
+**每笔 commit 前必须通过 clean build + 全量压测。** 耗时 ~80s（17s build + 64s test）。
+
+```bash
+# 1. 修改代码
+
+# 2. clean build
+rm -rf build
+cmake -S . -B build
+cmake --build build --target camera_qcom chifeature2test -j$(nproc)
+
+# 3. 全量压测（10 轮 × 5 用例）
+#    cd build：库按相对 CWD 路径加载 ./lib/libcamera_qcom.so（chxutils.cpp:773 LibMap）
+cd build
+for i in $(seq 1 10); do
+  result=$(./chifeature2test/chifeature2test -f 1 2>&1 | grep 'Final Report')
+  echo "Round $i: $result"
+  echo "$result" | grep -q '0 FAILED' || { echo "FAIL"; exit 1; }
+done
+cd ..
+
+# 4. code review
+git diff
+
+# 5. commit
+git add -A && git commit -m "..."
 ```

@@ -150,7 +150,7 @@
       "file": "entries/phase3-workaround-inventory.md",
       "tags": ["configuration", "phase3", "port"],
       "created": "2026-06-20",
-      "updated": "2026-06-20"
+      "updated": "2026-06-29"
     },
     {
       "id": "phase3-test-issues-analysis",
@@ -273,9 +273,9 @@
     },
     {
       "id": "android-log-system-redesign",
-      "title": "Android 风格日志系统整改 — XLOG 宏设计 + 三层架构 + 迁移方式",
+      "title": "Android 风格日志系统整改 — XLOG 宏设计 + 三层架构 + CHX_LOG 统一",
       "type": "design-decision",
-      "keywords": ["xlog", "xloge", "xlogi", "xlogd", "android-log", "__android_log_print", "__camx_log_emit", "log-tag", "cf2_log", "chx_log", "camx_log", "aloge", "fprintf", "stub", "logcat", "timestamp", "pid", "tid"],
+      "keywords": ["xlog", "xloge", "xlogi", "xlogd", "android-log", "__android_log_print", "__camx_log_emit", "log-tag", "cf2_log", "chx_log", "camx_log", "aloge", "fprintf", "stub", "logcat", "timestamp", "pid", "tid", "g_enableChxLogs", "ChiLog", "LogSystem", "CHIUSECASE"],
       "file": "entries/android-log-system-redesign.md",
       "tags": ["design-decision", "logging", "infrastructure"],
       "created": "2026-06-22",
@@ -289,7 +289,7 @@
       "file": "entries/project-onboarding.md",
       "tags": ["architecture", "design-decision", "overview"],
       "created": "2026-06-22",
-      "updated": "2026-06-22"
+      "updated": "2026-06-29"
     },
     {
       "id": "chifence-dependency-flow",
@@ -325,7 +325,7 @@
       "id": "feature2-fro-state-machine",
       "title": "FRO 十状态状态机 — 以 TestBayerToYUV 为例的完整追踪",
       "type": "source-analysis",
-      "keywords": ["feature2", "fro", "requestobject", "chifeature2requeststate", "state-machine", "initialized", "readytoexecute", "executing", "inputresourcepending", "inputresourcependingscheduled", "outputresourcepending", "outputnotificationpending", "complete", "processrequest", "handlepreparerequest", "handleexecuteprocessrequest", "threadcallback", "processbuffercallback", "testbayertoyuv"],
+      "keywords": ["feature2", "fro", "requestobject", "chifeature2requeststate", "state-machine", "initialized", "readytoexecute", "executing", "inputresourcepending", "inputresourcependingscheduled", "outputresourcepending", "outputnotificationpending", "complete", "processrequest", "handlepreparerequest", "handleexecuteprocessrequest", "threadcallback", "processbuffercallback", "testbayertoyuv", "uro", "usecaserequestobject", "process_capture_request", "walkbackfromlink", "g_enableChxLogs"],
       "file": "entries/feature2-fro-state-machine.md",
       "tags": ["architecture", "source-analysis", "feature2", "state-machine"],
       "created": "2026-06-22",
@@ -340,6 +340,195 @@
       "tags": ["architecture", "source-analysis", "feature2", "test"],
       "created": "2026-06-22",
       "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-why-feature2",
+      "title": "Feature2 解决了什么问题 — Pipeline/Session 的能力边界与 Feature2 的价值",
+      "type": "source-analysis",
+      "keywords": ["feature2", "why", "pipeline", "session", "mfnr", "mfsr", "hdr", "graph", "multi-frame", "multi-pipeline", "multi-stage", "feature-graph", "bayer2yuv", "realtime", "anchorsync", "demux", "serializer", "jpeg", "architecture", "layer"],
+      "file": "entries/feature2-why-feature2.md",
+      "tags": ["architecture", "source-analysis", "feature2", "design-decision"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-onp-buffer-release",
+      "title": "ONP Buffer 释放机制 — 三标志位 + Graph 路由 + TBM 引用计数",
+      "type": "source-analysis",
+      "keywords": ["feature2", "onp", "outputnotificationpending", "buffer", "release", "pOutputNotified", "pReleaseAcked", "pOutputGenerated", "SetOutputNotifiedForPort", "SetReleaseAcknowledgedForPort", "HandleOutputNotificationPending", "AreOutputsReleased", "ReleaseTargetBuffer", "ProcessReleaseDependency", "ReleaseInputDependency", "ProcessResultMetadataMessage", "ProcessReleaseInputDependencyMessage", "CHITargetBufferManager", "refcount", "graph-routing"],
+      "file": "entries/feature2-onp-buffer-release.md",
+      "tags": ["architecture", "source-analysis", "feature2", "buffer"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-processrequest-pump",
+      "title": "ProcessRequest 泵模型 — 谁在推动 FRO 状态前进",
+      "type": "source-analysis",
+      "keywords": ["feature2", "processrequest", "pump", "onprocessrequest", "canrequestcontinue", "postjob", "threadcallback", "handlepreparerequest", "handleexecuteprocessrequest", "handleinputresourcepending", "handleoutputnotificationpending", "sendsubmitrequestmessage", "do-while", "synchronous", "asynchronous", "graph-driver", "walkbackfromlink", "walkallextsrclinks", "walkallextsinklinks"],
+      "file": "entries/feature2-processrequest-pump.md",
+      "tags": ["architecture", "source-analysis", "feature2", "state-machine"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "two-feature-graph-feasibility",
+      "title": "两 Feature Graph 测试用例可行性评估",
+      "type": "design-decision",
+      "keywords": ["feature2", "graph", "two-feature", "feasibility", "b2y-jpeg", "chifeature2graph", "graphmanager", "graphdesc", "uro", "usecaserequestobject", "setinputtargetbufferhandle", "walkallextsrclinks", "walkallextsinklinks", "dual-pipeline", "csl-mock", "dummynode", "ubm", "calloc", "gralloc", "processmessage-static", "graphprivatedata", "graphcallbackdata"],
+      "file": "entries/two-feature-graph-feasibility.md",
+      "tags": ["architecture", "design-decision", "feature2", "test"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "feature2-b2y-state-by-state",
+      "title": "TestBayerToYUV 逐状态数据流 — 10 个 FRO 状态的输入/处理/转换全追踪",
+      "type": "source-analysis",
+      "keywords": ["feature2", "testbayertoyuv", "bayer2yuv", "state-by-state", "fro", "init", "readytoexecute", "executing", "inputresourcepending", "outputresourcepending", "outputnotificationpending", "complete", "executeflowtype0", "populatedependency", "submitrequesttosession", "processbuffercallback", "getdependency", "setbufferinfo", "dummynode", "rdi", "raw10", "ycbcr420"],
+      "file": "entries/feature2-b2y-state-by-state.md",
+      "tags": ["architecture", "source-analysis", "feature2", "state-machine", "test"],
+      "created": "2026-06-22",
+      "updated": "2026-06-22"
+    },
+    {
+      "id": "eis-algorithm-principles",
+      "title": "EIS 电子防抖原理 — 陀螺仪数据流 + Margin/Warp 机制 + v2/v3 对比",
+      "type": "source-analysis",
+      "keywords": ["eis", "eisv2", "eisv3", "electronic-image-stabilization", "gyroscope", "gyro", "ncs", "warp", "margin", "crop", "ica", "ipe", "perspective-transform", "grid-transform", "IPEICAPerspectiveTransform", "IPEICAGridTransform", "lookahead", "buffer-delay", "frame-times", "sof", "rolling-shutter", "qsee", "ssc", "qtimer", "stabilization"],
+      "file": "entries/eis-algorithm-principles.md",
+      "tags": ["architecture", "source-analysis", "algorithm", "sensor"],
+      "created": "2026-06-23",
+      "updated": "2026-06-23"
+    },
+    {
+      "id": "camx-node-catalog",
+      "title": "CamX 全量 Node 目录 — HWL/SWL/CHI 三层节点分类与功能",
+      "type": "source-analysis",
+      "keywords": ["node", "ife", "ipe", "bps", "jpeg", "lrme", "cvp", "sensor", "statsprocessing", "autofocus", "autowhitebalance", "fdmanager", "jpegaggregator", "ransac", "eis", "dewarp", "memcpy", "gpu", "remosaic", "depth", "dummysat", "dummyrtb", "swcac", "fcv", "hwl", "swl", "chi-node", "pipeline", "3a", "stats"],
+      "file": "entries/camx-node-catalog.md",
+      "tags": ["architecture", "source-analysis", "node", "pipeline"],
+      "created": "2026-06-23",
+      "updated": "2026-06-23"
+    },
+    {
+      "id": "remosaic-overview",
+      "title": "Demosaic 与 Remosaic 技术综述 — 从传统 Bayer 到 Quad Bayer 的演进",
+      "type": "general",
+      "keywords": ["demosaic", "remosaic", "quadbayer", "quadcfa", "bayer", "sensor", "binning", "cfa", "pixel-merge", "quad-bayer", "four-in-one"],
+      "file": "entries/remosaic-overview.md",
+      "tags": ["sensor", "image-processing", "general-knowledge"],
+      "created": "2026-06-23",
+      "updated": "2026-06-23"
+    },
+    {
+      "id": "rdi-raw-format-decision-chain",
+      "title": "RDI Raw 格式配置决定链 — Packed (MIPI) vs Unpacked (Plain16)",
+      "type": "source-analysis",
+      "keywords": ["rdi", "raw", "format", "packed", "unpacked", "mipi", "plain16", "ife", "setrdirectoutputportformat", "translateformattoispimagfeformat", "csidecode", "sensorxml", "pipeline", "portSourceType", "pdaf"],
+      "file": "entries/rdi-raw-format-decision-chain.md",
+      "tags": ["ife", "format", "pipeline", "sensor"],
+      "created": "2026-06-23",
+      "updated": "2026-06-23"
+    },
+    {
+      "id": "ife-internal-pipeline",
+      "title": "IFE 内部处理流程 — Pixel Path vs RDI Path 分道扬镳",
+      "type": "source-analysis",
+      "keywords": ["ife", "csid", "camif", "rdi", "pixel-path", "commonpath", "bls", "linearization", "demosaic", "isp", "iq-module", "titan480", "pipeline-path", "black-level", "bypass"],
+      "file": "entries/ife-internal-pipeline.md",
+      "tags": ["ife", "architecture", "isp", "hardware"],
+      "created": "2026-06-23",
+      "updated": "2026-06-23"
+    },
+    {
+      "id": "ife-vs-bps-b2y-split",
+      "title": "IFE vs BPS 分工 — 预览用 IFE 做 B2Y，拍照用 BPS 做 B2Y 的原因",
+      "type": "source-analysis",
+      "keywords": ["ife", "bps", "bayer", "yuv", "b2y", "preview", "snapshot", "zsl", "offline", "inline", "gic", "hnr", "lenr", "cac", "ring-buffer", "iq-module"],
+      "file": "entries/ife-vs-bps-b2y-split.md",
+      "tags": ["ife", "bps", "architecture", "pipeline"],
+      "created": "2026-06-23",
+      "updated": "2026-06-28"
+    },
+    {
+      "title": "ChiMetadataManager 三实现对比 — 原始源码 vs nativechitest 拷贝 vs chifeature2test patch",
+      "type": "source-analysis",
+      "keywords": ["chimetadatamanager", "chxmetadata", "create", "constructor", "patched-srcs", "chiutils", "odr", "feature2testcase", "registerclient", "testbayertoyuv", "klhg", "three-impls", "nativechitest", "chifeature2test"],
+      "file": "entries/chimetadatamanager-three-impls.md",
+      "tags": ["architecture", "source-analysis", "build", "test"],
+      "created": "2026-06-23",
+      "updated": "2026-06-28"
+    },
+    {
+      "id": "nativechitest-crash-sensor-module",
+      "title": "nativechitest 崩溃分析 — sensor module 缺失导致 SIGTRAP → runtime_error",
+      "type": "debugging",
+      "keywords": ["nativechitest", "crash", "sensor", "imagessensormoduledatamanager", "sigint", "runtime-error", "signalhandler", "customnodetest", "vendortagwrite", "isSensorInput", "probeimagesensormodules", "createallsensormodulesetmanagers", "filecount", "cslmock"],
+      "file": "entries/nativechitest-crash-sensor-module.md",
+      "tags": ["debugging", "crash", "sensor", "nativechitest"],
+      "created": "2026-06-28",
+      "updated": "2026-06-28"
+    },
+    {
+      "id": "dummynode-vs-camxnode-architecture",
+      "title": "DummyNode vs CamX Node 架构评估 — 用 camxnode.cpp 替代 dummy_node 的可行性",
+      "type": "source-analysis",
+      "keywords": ["dummynode", "camxnode", "node", "bpsnode", "ipenode", "hwfactory", "titan17xfactory", "dummyhwfactory", "hwl", "camx", "core", "virtual", "override", "executeprocessrequest", "processingnodeinitialize", "buffer", "fence", "metadata", "drq", "dependency", "chifeature2test", "testbayertoyuv", "cmake"],
+      "file": "entries/dummynode-vs-camxnode-architecture.md",
+      "tags": ["architecture", "source-analysis", "node", "dummynode", "hwl", "camx-core"],
+      "created": "2026-06-28",
+      "updated": "2026-06-28"
+    },
+    {
+      "id": "camxnode-patches-w2-w5-analysis",
+      "title": "camxnode.cpp 原版 vs patched diff — W2/W5 修复方案",
+      "type": "source-analysis",
+      "keywords": ["camxnode", "patch", "w2", "w5", "pSensorCaps", "GetCameraInfo", "buffermanager", "MPM", "mpmenable", "m_numberSensors", "ProbeImageSensorModules", "ImageSensorModuleDataManager", "CAMX_ASSERT", "SIGTRAP", "signalhandler", "workaround", "fix"],
+      "file": "entries/camxnode-patches-w2-w5-analysis.md",
+      "tags": ["source-analysis", "workaround", "patch", "camxnode", "fix"],
+      "created": "2026-06-28",
+      "updated": "2026-06-29"
+    },
+    {
+      "id": "mpm-portability-risk-analysis",
+      "title": "MemPoolMgr (MPM) 移植风险系统调查 — x86 CMake 环境可行性",
+      "type": "source-analysis",
+      "keywords": ["mempoolmgr", "mpm", "mempoolgroup", "buffer", "cslalloc", "mempoomgr", "workaround", "w4", "w5", "registerbuffermanager", "threadcreate", "pthread", "gralloc", "cslmock", "devicecount", "ion", "egl", "mutex", "condition", "monitorthread", "use-after-free", "destructor", "isfree"],
+      "file": "entries/mpm-portability-risk-analysis.md",
+      "tags": ["source-analysis", "mempoolmgr", "mpm", "buffer", "risk", "x86", "cmake"],
+      "created": "2026-06-28",
+      "updated": "2026-06-28"
+    },
+    {
+      "id": "drq-bps-dependency-satisfaction",
+      "title": "BPS Node 依赖满足机制 — Session预signal + DRQ fence skip + Dummy无dep，三条路径归零等待",
+      "type": "source-analysis",
+      "keywords": ["bps", "dependency", "satisfaction", "session", "setuprequestdata", "fence-presignal", "pisfencesignaled", "cslfencesignal", "dummybpsnode", "dummynode", "setdependencies", "executeProcessRequest", "deferredworker", "readynodes", "null-dependency", "fencesignaled", "testbayertoyuv", "adddeferrednode"],
+      "file": "entries/drq-bps-dependency-satisfaction.md",
+      "tags": ["architecture", "source-analysis", "pipeline", "drq", "dependency", "test"],
+      "created": "2026-06-29",
+      "updated": "2026-06-29"
+    },
+    {
+      "id": "drq-bps-ipe-dependency-registration",
+      "title": "DRQ 依赖注册完整链路 — BPS/IPE 在 TestBayerToYUV 中的 seq=0/1 两阶段 + IsTagPresentInPublishList gate",
+      "type": "source-analysis",
+      "keywords": ["drq", "dependency", "bps", "ipe", "setdependencies", "writedatalist", "processsequenceid", "seq0", "seq1", "istagpresentinpublishlist", "querymetadatapublishlist", "propertyidbpsgammaoutput", "propertyidbpsadrcinfooutput", "bpsmetadataoutputtags", "bpsmetadatapostlscoutputtags", "dummynode", "signaloutputfences", "gate", "testbayertoyuv"],
+      "file": "entries/drq-bps-ipe-dependency-registration.md",
+      "tags": ["architecture", "source-analysis", "pipeline", "drq", "dependency"],
+      "created": "2026-06-29",
+      "updated": "2026-06-29"
+    },
+    {
+      "id": "cmake-generated-sources-pattern",
+      "title": "CMake 生成源文件构建模式 — GLOB vs 显式列表 + GENERATED 属性",
+      "type": "configuration",
+      "keywords": ["cmake", "glob", "generated", "configure_depends", "source_file", "add_custom_command", "build", "generated-sources", "parameterparser"],
+      "file": "entries/cmake-generated-sources-pattern.md",
+      "tags": ["build", "configuration", "cmake", "methodology"],
+      "created": "2026-06-29",
+      "updated": "2026-06-29"
     }
   ]
 }
